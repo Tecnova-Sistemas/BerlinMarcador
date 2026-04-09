@@ -12,6 +12,7 @@ public partial class MarcacionPage : ContentPage
     {
         InitializeComponent();
         UpdateModeButtons();
+        LblDebug.Text = "Modo diagnostico activo. Esperando intento de marcacion...";
     }
 
     protected override void OnAppearing()
@@ -82,16 +83,27 @@ public partial class MarcacionPage : ContentPage
     private async Task DoMarcar(string cedula)
     {
         if (_busy) return;
+
+        if (!ValidarCedula(cedula))
+        {
+            ShowResult(new MarcacionResponse(false, $"Cedula {cedula} no valida", "", cedula, "Validacion local: la cedula no paso la regla del digito verificador."));
+            TxtCedula.Text = "";
+            TxtCedula.Focus();
+            return;
+        }
+
+        LblDebug.Text = $"Enviando solicitud al backend. Cedula: {cedula}, Tipo: {_tipo}";
+        FrameDebug.IsVisible = true;
         _busy = true;
 
         try
         {
-            var (status, msg) = await _api.MarcarAsync(cedula, _tipo);
-            ShowResult(msg, status);
+            var result = await _api.MarcarAsync(cedula, _tipo);
+            ShowResult(result);
         }
         catch (Exception ex)
         {
-            ShowResult("Error de conexion: " + ex.Message, false);
+            ShowResult(new MarcacionResponse(false, "Error de conexion: " + ex.Message, "", cedula, ex.ToString()));
         }
         finally
         {
@@ -101,13 +113,75 @@ public partial class MarcacionPage : ContentPage
         }
     }
 
-    private void ShowResult(string msg, bool ok)
+    private void ShowResult(MarcacionResponse result)
     {
-        LblResult.Text = msg;
-        LblResult.TextColor = ok ? Color.FromArgb("#0f5132") : Color.FromArgb("#842029");
-        FrameResult.BackgroundColor = ok ? Color.FromArgb("#d1e7dd") : Color.FromArgb("#f8d7da");
-        FrameResult.BorderColor = ok ? Color.FromArgb("#badbcc") : Color.FromArgb("#f5c2c7");
+        LblResult.Text = result.Msg;
+        LblResult.TextColor = result.Status ? Color.FromArgb("#0f5132") : Color.FromArgb("#842029");
+        FrameResult.BackgroundColor = result.Status ? Color.FromArgb("#d1e7dd") : Color.FromArgb("#f8d7da");
+        FrameResult.BorderColor = result.Status ? Color.FromArgb("#badbcc") : Color.FromArgb("#f5c2c7");
         FrameResult.IsVisible = true;
+
+        var shouldShowEmployee = ShouldShowEmployeeData(result.Msg);
+        var cedula = string.IsNullOrWhiteSpace(result.Cedula) ? TxtCedula.Text?.Trim() ?? "" : result.Cedula.Trim();
+        var nombre = result.Nombre.Trim();
+
+        if (shouldShowEmployee && (!string.IsNullOrWhiteSpace(nombre) || !string.IsNullOrWhiteSpace(cedula)))
+        {
+            var parts = new List<string>();
+            if (!string.IsNullOrWhiteSpace(nombre))
+                parts.Add(nombre);
+            if (!string.IsNullOrWhiteSpace(cedula))
+                parts.Add($"CI: {cedula}");
+
+            LblNombre.Text = string.Join(" - ", parts);
+            LblNombre.IsVisible = true;
+        }
+        else
+        {
+            LblNombre.Text = "";
+            LblNombre.IsVisible = false;
+        }
+
+        LblDebug.Text = string.IsNullOrWhiteSpace(result.RawResponse) ? "Sin detalle adicional" : result.RawResponse;
+        FrameDebug.IsVisible = true;
+    }
+
+    private static bool ShouldShowEmployeeData(string msg)
+    {
+        var normalized = msg.ToLowerInvariant();
+
+        return normalized.Contains("no existe una marcacion de entrada") ||
+               normalized.Contains("no existe una marcacion de salida") ||
+               normalized.Contains("ya hay una entrada") ||
+               normalized.Contains("ya hay una salida");
+    }
+
+    private static bool ValidarCedula(string id)
+    {
+        if (id.Length != 10 || !id.All(char.IsDigit))
+            return false;
+
+        var provincia = int.Parse(id[..2]);
+        if (!((provincia >= 1 && provincia <= 24) || provincia == 30))
+            return false;
+
+        var suma = 0;
+        for (var i = 0; i < 9; i++)
+        {
+            var digito = id[i] - '0';
+            if (i % 2 == 0)
+            {
+                digito *= 2;
+                if (digito > 9)
+                    digito -= 9;
+            }
+
+            suma += digito;
+        }
+
+        var residuo = suma % 10;
+        var verificador = residuo == 0 ? 0 : 10 - residuo;
+        return (id[9] - '0') == verificador;
     }
 
     private void OnLogoutTapped(object sender, TappedEventArgs e)

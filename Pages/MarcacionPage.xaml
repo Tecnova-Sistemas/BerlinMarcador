@@ -7,6 +7,13 @@
     <ScrollView>
     <VerticalStackLayout Spacing="8" Padding="12" MaximumWidthRequest="480" HorizontalOptions="Center">
 
+        <Frame BackgroundColor="#842029" BorderColor="#F5C2C7" Padding="10" CornerRadius="8">
+            <Label Text="DEBUG BUILD 2026-04-09  Verifica esta version"
+                   TextColor="White"
+                   FontAttributes="Bold"
+                   HorizontalTextAlignment="Center"/>
+        </Frame>
+
         <!-- Entrada / Salida -->
         <Grid ColumnDefinitions="*,*" ColumnSpacing="8">
             <Button x:Name="BtnEntrada" Text="ENTRADA" Grid.Column="0"
@@ -45,6 +52,15 @@
         <!-- Nombre empleado -->
         <Label x:Name="LblNombre" FontSize="20" FontAttributes="Bold" HorizontalTextAlignment="Center"
                TextColor="#333" IsVisible="False"/>
+
+        <!-- Diagnostico backend -->
+        <Frame x:Name="FrameDebug" IsVisible="True" CornerRadius="8" Padding="12" BackgroundColor="#FFF3CD" BorderColor="#FFDA6A">
+            <VerticalStackLayout Spacing="6">
+                <Label Text="Respuesta backend" FontSize="13" FontAttributes="Bold" TextColor="#664D03"/>
+                <Label x:Name="LblDebug" FontSize="12" FontFamily="Courier New" LineBreakMode="WordWrap" TextColor="#664D03"
+                       Text="Esperando intento de marcacion..."/>
+            </VerticalStackLayout>
+        </Frame>
 
         <!-- Logout -->
         <Label Text="Cerrar sesion" TextColor="#666" FontSize="12" HorizontalTextAlignment="End">
