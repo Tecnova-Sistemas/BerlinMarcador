@@ -9,9 +9,12 @@ public class ApiService
 
     public ApiService()
     {
-        var handler = new HttpClientHandler
+        var handler = new SocketsHttpHandler
         {
-            ServerCertificateCustomValidationCallback = (_, _, _, _) => true
+            SslOptions = new System.Net.Security.SslClientAuthenticationOptions
+            {
+                RemoteCertificateValidationCallback = (_, _, _, _) => true
+            }
         };
         _http = new HttpClient(handler) { Timeout = TimeSpan.FromSeconds(10) };
     }
