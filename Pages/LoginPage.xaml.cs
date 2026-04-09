@@ -4,7 +4,7 @@ namespace BerlinMarcador.Pages;
 
 public partial class LoginPage : ContentPage
 {
-    private readonly DatabaseService _db = new();
+    private readonly ApiService _api = new();
 
     public LoginPage()
     {
@@ -25,7 +25,7 @@ public partial class LoginPage : ContentPage
         BtnLogin.IsEnabled = false;
         try
         {
-            var (ok, msg) = await _db.ValidarUsuarioAsync(usuario, clave);
+            var (ok, msg) = await _api.LoginAsync(usuario, clave);
             if (ok)
             {
                 Application.Current!.MainPage = new NavigationPage(new MarcacionPage());

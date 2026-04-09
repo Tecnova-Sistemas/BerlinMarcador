@@ -4,7 +4,7 @@ namespace BerlinMarcador.Pages;
 
 public partial class MarcacionPage : ContentPage
 {
-    private readonly DatabaseService _db = new();
+    private readonly ApiService _api = new();
     private string _tipo = "E";
     private bool _busy;
 
@@ -86,7 +86,7 @@ public partial class MarcacionPage : ContentPage
 
         try
         {
-            var (status, msg) = await _db.MarcarAsync(cedula, _tipo);
+            var (status, msg) = await _api.MarcarAsync(cedula, _tipo);
             ShowResult(msg, status);
         }
         catch (Exception ex)
