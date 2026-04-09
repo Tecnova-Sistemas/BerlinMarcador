@@ -1,0 +1,58 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<ContentPage xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+             x:Class="BerlinMarcador.Pages.MarcacionPage"
+             BackgroundColor="#E4E7EC"
+             Title="Marcador">
+    <ScrollView>
+    <VerticalStackLayout Spacing="8" Padding="12" MaximumWidthRequest="480" HorizontalOptions="Center">
+
+        <!-- Entrada / Salida -->
+        <Grid ColumnDefinitions="*,*" ColumnSpacing="8">
+            <Button x:Name="BtnEntrada" Text="ENTRADA" Grid.Column="0"
+                    BackgroundColor="#198754" TextColor="White" FontAttributes="Bold"
+                    BorderColor="#146c43" BorderWidth="2" CornerRadius="6"
+                    Clicked="OnEntradaClicked"/>
+            <Button x:Name="BtnSalida" Text="SALIDA" Grid.Column="1"
+                    BackgroundColor="White" TextColor="#6c757d" FontAttributes="Bold"
+                    BorderColor="#ced4da" BorderWidth="2" CornerRadius="6"
+                    Clicked="OnSalidaClicked"/>
+        </Grid>
+
+        <!-- Input cedula -->
+        <Entry x:Name="TxtCedula" Placeholder="Listo para escanear"
+               Keyboard="Numeric" MaxLength="10" FontSize="18"
+               HorizontalTextAlignment="Center" FontFamily="Courier New"
+               BackgroundColor="White"
+               TextChanged="OnCedulaTextChanged"/>
+
+        <!-- Marcar / Limpiar -->
+        <Grid ColumnDefinitions="*,*" ColumnSpacing="8">
+            <Button Text="Marcar" Grid.Column="0"
+                    BackgroundColor="#0d6efd" TextColor="White" CornerRadius="6"
+                    Clicked="OnMarcarClicked"/>
+            <Button Text="Limpiar" Grid.Column="1"
+                    BackgroundColor="White" TextColor="#333" CornerRadius="6"
+                    BorderColor="#ccc" BorderWidth="1"
+                    Clicked="OnLimpiarClicked"/>
+        </Grid>
+
+        <!-- Result -->
+        <Frame x:Name="FrameResult" IsVisible="False" CornerRadius="8" Padding="12">
+            <Label x:Name="LblResult" FontSize="15" FontAttributes="Bold" HorizontalTextAlignment="Center"/>
+        </Frame>
+
+        <!-- Nombre empleado -->
+        <Label x:Name="LblNombre" FontSize="20" FontAttributes="Bold" HorizontalTextAlignment="Center"
+               TextColor="#333" IsVisible="False"/>
+
+        <!-- Logout -->
+        <Label Text="Cerrar sesion" TextColor="#666" FontSize="12" HorizontalTextAlignment="End">
+            <Label.GestureRecognizers>
+                <TapGestureRecognizer Tapped="OnLogoutTapped"/>
+            </Label.GestureRecognizers>
+        </Label>
+
+    </VerticalStackLayout>
+    </ScrollView>
+</ContentPage>

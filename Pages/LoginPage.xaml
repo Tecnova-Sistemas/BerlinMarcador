@@ -1,0 +1,20 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<ContentPage xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+             x:Class="BerlinMarcador.Pages.LoginPage"
+             BackgroundColor="#E4E7EC"
+             Title="Login">
+    <VerticalStackLayout VerticalOptions="Center" HorizontalOptions="Center" Spacing="10" Padding="20" WidthRequest="320">
+        <Frame BackgroundColor="White" CornerRadius="8" Padding="20" HasShadow="True">
+            <VerticalStackLayout Spacing="12">
+                <Label Text="Marcador de Empleados" FontSize="18" FontAttributes="Bold" HorizontalTextAlignment="Center" TextColor="#333"/>
+                <Label x:Name="LblError" TextColor="#dc3545" FontSize="13" HorizontalTextAlignment="Center" IsVisible="False"/>
+                <Label Text="Usuario" FontSize="13" TextColor="#555"/>
+                <Entry x:Name="TxtUsuario" Placeholder="Usuario" Keyboard="Default"/>
+                <Label Text="Contrasena" FontSize="13" TextColor="#555"/>
+                <Entry x:Name="TxtClave" Placeholder="Contrasena" IsPassword="True"/>
+                <Button x:Name="BtnLogin" Text="Ingresar" BackgroundColor="#0d6efd" TextColor="White" Clicked="OnLoginClicked"/>
+            </VerticalStackLayout>
+        </Frame>
+    </VerticalStackLayout>
+</ContentPage>

@@ -1,0 +1,10 @@
+<api type="debug" assembly-name="BerlinMarcador" mvid="3b6fe00f79534538a169922fe70380d4">
+  <java-to-managed>
+    <entry java-name="crc646bcc83b9a2a5cb8d/MainActivity" managed-name="BerlinMarcador.MainActivity, BerlinMarcador" managed-type-token-id="33554441" />
+    <entry java-name="crc646bcc83b9a2a5cb8d/MainApplication" managed-name="BerlinMarcador.MainApplication, BerlinMarcador" managed-type-token-id="33554442" />
+  </java-to-managed>
+  <managed-to-java>
+    <entry java-name="crc646bcc83b9a2a5cb8d/MainActivity" managed-name="BerlinMarcador.MainActivity, BerlinMarcador" managed-type-token-id="33554441" />
+    <entry java-name="crc646bcc83b9a2a5cb8d/MainApplication" managed-name="BerlinMarcador.MainApplication, BerlinMarcador" managed-type-token-id="33554442" />
+  </managed-to-java>
+</api>
