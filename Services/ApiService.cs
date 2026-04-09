@@ -44,8 +44,8 @@ public class ApiService
 
     public async Task<MarcacionResponse> MarcarAsync(string cedula, string tipo)
     {
-        var endpoint = $"berlinGestion/empleados/marcacion/{Uri.EscapeDataString(cedula)}/{Uri.EscapeDataString(tipo)}";
-        var json = await PostAsync(endpoint);
+        var endpoint = $"berlinGestion/api/empleados/marcacion/{Uri.EscapeDataString(cedula)}/{Uri.EscapeDataString(tipo)}";
+        var json = await GetAsync(endpoint);
         var trimmed = json.TrimStart();
 
         if (trimmed.StartsWith("<", StringComparison.Ordinal))
@@ -110,10 +110,9 @@ public class ApiService
         return await SendAsync(() => _http.PostAsync(endpoint, form));
     }
 
-    private async Task<string> PostAsync(string endpoint)
+    private async Task<string> GetAsync(string endpoint)
     {
-        using var content = new StringContent(string.Empty);
-        return await SendAsync(() => _http.PostAsync(endpoint, content));
+        return await SendAsync(() => _http.GetAsync(endpoint));
     }
 
     private async Task<string> SendAsync(Func<Task<HttpResponseMessage>> request)
